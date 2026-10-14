@@ -1,0 +1,27 @@
+name: Daily Data Sync
+
+on:
+  schedule:
+    # Daily at 5:00 PM PKT (12:00 PM UTC)
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Initialize Environment
+        uses: actions/checkout@v4
+
+      - name: Setup Runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Client Libraries
+        run: |
+          pip install google-api-python-client google-auth-oauthlib
+
+      - name: Execute Sync Engine
+        run: |
+          python core_sync.py
